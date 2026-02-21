@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ponto - SAB DOM FERIADOS (CSV)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="header">
+      <h1>Ponto: SAB / DOM / FERIADOS (CSV)</h1>
+      <p class="sub">
+        Versão <strong>sem XLSX</strong> (funciona mesmo com bloqueio de CDN).
+        Você envia o <strong>CSV</strong> da aba EXPORT e baixa o <strong>CSV</strong> final.
+      </p>
+      <div class="note">
+        <strong>Como gerar o CSV no Excel:</strong> Arquivo → Salvar Como → tipo <em>CSV (delimitado por vírgulas)</em> ou <em>CSV UTF-8</em>.
+        Se sair com <code>;</code> em vez de <code>,</code>, tudo bem (o site detecta).
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>Entrada</h2>
+
+      <div class="row">
+        <div class="col">
+          <label>CSV do ponto (EXPORT)</label>
+          <input type="file" id="fileInput" accept=".csv,text/csv" />
+          <div class="muted" id="fileInfo">Nenhum arquivo selecionado.</div>
+        </div>
+
+        <div class="col">
+          <label>Delimitador do CSV</label>
+          <select id="delimiterSelect">
+            <option value="auto" selected>Auto (recomendado)</option>
+            <option value=";">Ponto e vírgula (;)</option>
+            <option value=",">Vírgula (,)</option>
+            <option value="\t">Tab</option>
+          </select>
+          <div class="muted">O site tenta detectar automaticamente.</div>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="row">
+        <div class="col">
+          <label>Feriados (opcional) — CSV com colunas DATA e FERIADO/NOME</label>
+          <div class="row">
+            <label class="switch">
+              <input type="checkbox" id="useDefaultHolidays" checked />
+              <span class="slider"></span>
+            </label>
+            <div>
+              <div><strong>Usar feriados padrão</strong></div>
+              <div class="muted">Você pode importar para complementar/substituir.</div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <input type="file" id="holidaysFileInput" accept=".csv,text/csv" />
+            <button id="btnImportHolidays" class="btn secondary" disabled>Importar feriados</button>
+          </div>
+          <div class="muted" id="holidaysInfo">Feriados carregados: 0</div>
+        </div>
+
+        <div class="col">
+          <label>O que calcular?</label>
+          <div class="checks">
+            <label class="check"><input type="checkbox" id="chkSat" checked /> Sábado</label>
+            <label class="check"><input type="checkbox" id="chkSun" checked /> Domingo</label>
+            <label class="check"><input type="checkbox" id="chkHol" checked /> Feriados</label>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <label class="check small">
+              <input type="checkbox" id="chkHolidayPriority" checked />
+              Feriado tem prioridade (se cair no sábado/domingo, marca como FERIADO)
+            </label>
+          </div>
+
+          <div class="muted">Regra: só entra no resultado quando <strong>Horas Normais</strong> NÃO estiver vazia.</div>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="row">
+        <button id="btnRun" class="btn" disabled>Executar</button>
+        <a id="btnDownload" class="btn" download="resultado_ponto.csv" hidden>Baixar CSV pronto</a>
+        <button id="btnClear" class="btn secondary">Limpar</button>
+      </div>
+
+      <div class="muted" id="statusMsg"></div>
+    </section>
+
+    <section class="card">
+      <h2>Prévia</h2>
+      <div id="summary" class="summary"></div>
+      <div class="tableWrap">
+        <table id="previewTable">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="muted">Saída: CSV com separador <strong>;</strong> (compatível com Excel PT-BR).</div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
